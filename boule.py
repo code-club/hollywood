@@ -34,9 +34,9 @@ class Boule(object):
     def __init__(self, text, type, parent):
         self.text = text
         self.type = type
-        self.x = random() * 5
-        self.y = random() * 5
-        self.z = -5
+        self.x = random() * 4.0 - 2.0
+        self.y = random() * 4.0 - 2.0
+        self.z = -10
         self.dx = 0
         self.dy = 0
         self.dz = 0

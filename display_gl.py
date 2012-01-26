@@ -27,13 +27,14 @@ def drawScene():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
 
-    glTranslatef(0.0, 0.0, -10.0)
-
     boules = _boule_store.get_boules()
     print("drawScene() ; %d boules" % len(boules))
 
-    # TODO : drawScene()
-    gluSphere(_quadric, 1.3, 32, 32)
+    for boule in boules:
+        glPushMatrix()
+        glTranslatef(boule.x, boule.y, boule.z)
+        gluSphere(_quadric, 1.0, 32, 32)
+        glPopMatrix()
 
     glutSwapBuffers()
 
@@ -79,6 +80,12 @@ def initGL():
     glEnable(GL_DEPTH_TEST)
     glDepthFunc(GL_LEQUAL)
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+
+    glEnable(GL_LIGHTING)
+    glLightfv(GL_LIGHT1, GL_AMBIENT, [0.5, 0.5, 0.5, 1.0])
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, [1.0, 1.0, 1.0, 1.0])
+    glLightfv(GL_LIGHT1, GL_POSITION, [-10.0, 10.0, 0.0, 1.0])
+    glEnable(GL_LIGHT1)
 
     global _quadric
     _quadric = gluNewQuadric()
