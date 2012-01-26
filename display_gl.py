@@ -28,19 +28,11 @@ def drawScene():
 
     glTranslatef(0.0, 0.0, -10.0)
 
-    # TODO : drawScene()
     boules = _boule_store.get_boules()
-
     print("drawScene() ; %d boules" % len(boules))
 
-    glBegin(GL_TRIANGLES)
-    glColor3f(1.0, 0.0, 0.0)
-    glVertex3f(1.0, 0.0, 0.0)
-    glColor3f(0.0, 1.0, 0.0)
-    glVertex3f(0.0, 1.0, 0.0)
-    glColor3f(0.0, 0.0, 1.0)
-    glVertex3f(0.0, 0.0, 1.0)
-    glEnd()
+    # TODO : drawScene()
+    gluSphere(_quadric, 1.3, 32, 32)
 
     glutSwapBuffers()
 
@@ -84,6 +76,11 @@ def initGL():
     glDepthFunc(GL_LEQUAL)
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
 
+    global _quadric
+    _quadric = gluNewQuadric()
+    gluQuadricNormals(_quadric, GLU_SMOOTH)
+    gluQuadricTexture(_quadric, GL_TRUE)
+
 _last_frame = time.clock()
 
 def updateScene():
@@ -109,7 +106,7 @@ def run(boule_store):
     Cette boucle se charge ensuite de dessiner les objets et d'appeler
     périodiquement main.update() pour les mettre à jour.
     """
-    global window
+    global _window
     global _boule_store
 
     _boule_store = boule_store
@@ -118,8 +115,8 @@ def run(boule_store):
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
     glutInitWindowSize(640, 480)
     glutInitWindowPosition(10, 10)
-    
-    window = glutCreateWindow('Visualisation')
+
+    _window = glutCreateWindow('Visualisation')
 
     glutDisplayFunc(drawScene)
 
