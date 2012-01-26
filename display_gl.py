@@ -10,11 +10,40 @@ from OpenGL import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
+import ctypes
 import time
 
 import main
 
+null = ctypes.c_void_p(0)
+
 _boule_store = None
+
+
+class VBO(object):
+    """
+    Un vertex buffer object.
+    """
+    def __init__(self, vertices):
+        self._bufferObject = glGenBuffers(1)
+        self._nbComponents = 4
+        self._nbVertices = len(vertices)/self._nbComponents
+        glBindBuffer(GL_ARRAY_BUFFER, self._bufferObject)
+        arraytype = (GLfloat * self._nbVertices * self._nbComponents)
+        glBufferData(
+                GL_ARRAY_BUFFER, self._nbVertices * 4, # 4 = sizeof(float)
+                arraytype(*vertices), GL_STATIC_DRAW
+        )
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+
+    def draw(self):
+        glBindBuffer(GL_ARRAY_BUFFER, self._bufferObject)
+        glEnableVertexAttribArray(0)
+        glVertexAttribPointer(0, self._nbComponents, GL_FLOAT, False, 0, null)
+
+        glDrawArrays(GL_TRIANGLES, 0, self._nbVertices)
+
+        glDisableVertexAttribArray(0)
 
 
 def drawScene():
