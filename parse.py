@@ -21,10 +21,10 @@ class Line:
                 self.type = type
                 self.name = m.group()
                 break
-     
+
     def __repr__(self):
-        return "Line(%s)"%repr(self.text)
-    
+        return "Line(%s)" % repr(self.text)
+
     def __hash__(self):
         return hash(self.parent) ^ hash(self.text)
 
@@ -40,7 +40,7 @@ def parse(filename):
             spaces = re.search(r'\A[ \t]*', line).end()
             if spaces + 1 == len(line) or line.strip().startswith('#'):
                 continue
-                
+
             # Depth normalization
             if indent_width == 1 and spaces != 0:
                 indent_width = spaces

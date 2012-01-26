@@ -16,6 +16,7 @@ import main
 
 _boule_store = None
 
+
 def drawScene():
     """
     drawScene()
@@ -36,6 +37,7 @@ def drawScene():
 
     glutSwapBuffers()
 
+
 def resizeWindow(width, height):
     """
     resizeWindow(width, height)
@@ -49,10 +51,11 @@ def resizeWindow(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(45.0, float(width)/float(height), 1, 1000.0)
+    gluPerspective(45.0, float(width) / float(height), 1, 1000.0)
 
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
+
 
 def keyPressed(*args):
     """
@@ -62,6 +65,7 @@ def keyPressed(*args):
     STUB
     """
     pass
+
 
 def initGL():
     """
@@ -83,6 +87,7 @@ def initGL():
 
 _last_frame = time.clock()
 
+
 def updateScene():
     """
     updateScene()
@@ -95,6 +100,7 @@ def updateScene():
     delta = now - _last_frame
     _last_frame = now
     main.update(delta)
+
 
 def run(boule_store):
     """

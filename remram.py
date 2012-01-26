@@ -4,6 +4,7 @@
 Module qui envoie du LOL.
 """
 
+
 def rofl(file):
     """
     rofl(file)

@@ -35,7 +35,7 @@ class Boule(object):
         self.text = text
         self.type = type
         self.x = random() * 5
-        self.y = random () * 5
+        self.y = random() * 5
         self.z = -5
         self.dx = 0
         self.dy = 0
@@ -44,16 +44,17 @@ class Boule(object):
         self.ay = 0
         self.az = 0
         self.m = BOULE_MASSES[type]
-        self.links = [] # (autre_boule, Lo, k)
+        self.links = []  # (autre_boule, Lo, k)
         self.parent = parent
         if self.parent:
             l0, k = LINKS_TYPES['PARENT_CHILD']
             self.links.append((parent, l0, k))
             self.parent.links.append((self, l0, k))
+
     def delete(self):
         for other, _, _ in self.links:
             other.remove_links(self)
-    
+
     def remove_links(self, other):
         # TODO : remplacer self.links par un dict
         self.links = [l for l in self.links if l[0] != other]

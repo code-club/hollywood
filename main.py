@@ -14,6 +14,7 @@ from converter import BouleStore
 
 boule_store = None
 
+
 def update(delta):
     """
     update(delta)
@@ -26,12 +27,13 @@ def update(delta):
     """
     # Gestion des sources : mise à jour des boules depuis les fichiers
     # Utilisation de inotify(2) ?
-    
+
     # Gestion physique : mise à jour des positions des boules par simulation
     # physique
     global boule_store
     boule_store.update()
     runge_kutta.move(boule_store.get_boules(), delta)
+
 
 def main():
     # ROFLCOPTER
