@@ -12,6 +12,7 @@ class BouleStore(object):
         self.files = files
         self.last_update = 0
         self.boules = None
+        self.update()
 
     def update(self):
         if time.time() - self.last_update > 5:
