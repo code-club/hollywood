@@ -5,13 +5,13 @@ from math import sqrt
 
 def integrateur_trivial(boules, h):
     eval_accelerations(boules)
-    for i in xrange(0, len(boules)):
-        boules[i].x += boules[i].dx * h
-        boules[i].y += boules[i].dy * h
-        boules[i].z += boules[i].dz * h
-        boules[i].dx += boules[i].ax * h
-        boules[i].dy += boules[i].ay * h
-        boules[i].dz += boules[i].az * h
+    for boule in boules:
+        boule.x += boule.dx * h
+        boule.y += boule.dy * h
+        boule.z += boule.dz * h
+        boule.dx += boule.ax * h
+        boule.dy += boule.ay * h
+        boule.dz += boule.az * h
 
 
 def add_vector(x1, x2):
@@ -41,40 +41,37 @@ def move(boules, h):
 
 
 def eval_accelerations(boules):
-    for i in xrange(0, len(boules)):
+    for i, boule in enumerate(boules):
         # Forces de répulsions
         for j in xrange(0, i):
-            d2 = (boules[i].x - boules[j].x) ** 2 + (boules[i].y - boules[j].y) ** 2 + (boules[i].z - boules[j].z) ** 2
+            other = boules[j]
+            d2 = (boule.x - other.x) ** 2 + (boule.y - other.y) ** 2 + (boule.z - other.z) ** 2
             if d2 == 0.:
                 d2 = 1.
             norme = sqrt(d2)
-            ux = (boules[i].x - boules[j].x) / norme
-            uy = (boules[i].y - boules[j].y) / norme
-            uz = (boules[i].z - boules[j].z) / norme
+            ux = (boule.x - other.x) / norme
+            uy = (boule.y - other.y) / norme
+            uz = (boule.z - other.z) / norme
 
-            boules[i].ax -= boules[i].m * boules[j].m / d2 * ux
-            boules[i].ay -= boules[i].m * boules[j].m / d2 * uy
-            boules[i].az -= boules[i].m * boules[j].m / d2 * uz
-            boules[j].ax += boules[i].m * boules[j].m / d2 * ux
-            boules[j].ay += boules[i].m * boules[j].m / d2 * uy
-            boules[j].az += boules[i].m * boules[j].m / d2 * uz
+            boule.ax -= boule.m * other.m / d2 * ux
+            boule.ay -= boule.m * other.m / d2 * uy
+            boule.az -= boule.m * other.m / d2 * uz
+            other.ax += boule.m * other.m / d2 * ux
+            other.ay += boule.m * other.m / d2 * uy
+            other.az += boule.m * other.m / d2 * uz
 
         # Forces de ressorts
-        for p in xrange(0, len(boules[i].links)):
-            boule = boules[i].links[p][0]
-            l0 = boules[i].links[p][1]
-            k = boules[i].links[p][2]
-
-            norme = sqrt((boules[i].x - boule.x) ** 2 + (boules[i].y - boule.y) ** 2 + (boules[i].z - boule.z) ** 2)
+        for other, l0, k in boule.links:
+            norme = sqrt((boule.x - other.x) ** 2 + (boule.y - other.y) ** 2 + (boule.z - other.z) ** 2)
             if norme == 0.:
                 norme = 1
-            ux = (boules[i].x - boule.x) / norme
-            uy = (boules[i].y - boule.y) / norme
-            uz = (boules[i].z - boule.z) / norme
+            ux = (boule.x - other.x) / norme
+            uy = (boule.y - other.y) / norme
+            uz = (boule.z - other.z) / norme
 
-            boules[i].ax += k * (norme - l0) * ux
-            boules[i].ay += k * (norme - l0) * uy
-            boules[i].az += k * (norme - l0) * uz
-            boule.ax -= k * (norme - l0) * ux
-            boule.ay -= k * (norme - l0) * uy
-            boule.az -= k * (norme - l0) * uz
+            boule.ax += k * (norme - l0) * ux
+            boule.ay += k * (norme - l0) * uy
+            boule.az += k * (norme - l0) * uz
+            other.ax -= k * (norme - l0) * ux
+            other.ay -= k * (norme - l0) * uy
+            other.az -= k * (norme - l0) * uz
