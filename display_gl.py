@@ -57,7 +57,6 @@ def drawScene():
     glLoadIdentity()
 
     boules = _boule_store.get_boules()
-    print("drawScene() ; %d boules" % len(boules))
 
     for boule in boules:
         glPushMatrix()
@@ -66,7 +65,6 @@ def drawScene():
         glPopMatrix()
 
     glutSwapBuffers()
-    glutPostRedisplay()  # Demande le réaffichage
 
 
 def resizeWindow(width, height):
@@ -122,8 +120,9 @@ def initGL():
     gluQuadricNormals(_quadric, GLU_SMOOTH)
     gluQuadricTexture(_quadric, GL_TRUE)
 
-_last_frame = time.clock()
 
+_last_frame = time.clock()
+_target_fps = 30.0
 
 def updateScene():
     """
@@ -132,11 +131,19 @@ def updateScene():
     Fonction de mise à jour appelée périodiquement par GLUT.
     Wrapper se contentant d'appeler main.update()
     """
+
+    # Calcul du temps écoulé
     global _last_frame
     now = time.clock()
     delta = now - _last_frame
     _last_frame = now
+
+    # Limite à 30fps environ
+    if delta < 0.033:
+        time.sleep(0.033 - delta)
+
     main.update(delta)
+    glutPostRedisplay()  # Demande le réaffichage
 
 
 def run(boule_store):
