@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 import re
+import logging
 
 
 LINE_TYPES = {
@@ -30,6 +31,7 @@ class Line:
 
 
 def parse(filename):
+    logging.debug('Parsing %s', filename)
     indent_width = 1
     root = Line(filename, None)
     yield root, None
@@ -46,10 +48,15 @@ def parse(filename):
                 indent_width = spaces
             depth = spaces / indent_width
 
-            obj = Line(line.strip(), refs[depth - 1])
-            refs[depth] = obj
-            if obj.type:
-                yield obj, refs[depth - 1]
+            try:
+                obj = Line(line.strip(), refs[depth - 1])
+                refs[depth] = obj
+                if obj.type:
+                    yield obj, refs[depth - 1]
+            except KeyError:
+                # si depth-1 n'est pas dans refs :
+                # on ignore, c'est juste un jeu sur l'indentation
+                pass
 
 
 if __name__ == '__main__':
