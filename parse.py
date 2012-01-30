@@ -29,6 +29,9 @@ class Line:
     def __hash__(self):
         return hash(self.parent) ^ hash(self.text)
 
+    def __eq__(self, other):
+        return self.text == other.text and self.parent == other.parent
+
 
 def parse(filename):
     logging.debug('Parsing %s', filename)
