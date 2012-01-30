@@ -66,6 +66,7 @@ def drawScene():
         glPopMatrix()
 
     glutSwapBuffers()
+    glutPostRedisplay()  # Demande le réaffichage
 
 
 def resizeWindow(width, height):
