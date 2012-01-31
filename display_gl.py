@@ -123,7 +123,7 @@ def initGL():
 
 _last_frame = time.clock()
 TARGET_FPS = 30.0
-DELAY = int(1000 / TARGET_FPS) /10
+DELAY = int(1000 / TARGET_FPS)
 
 def updateScene(_=None):
     """
