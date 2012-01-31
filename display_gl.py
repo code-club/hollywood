@@ -122,9 +122,10 @@ def initGL():
 
 
 _last_frame = time.clock()
-_target_fps = 30.0
+TARGET_FPS = 30.0
+DELAY = int(1000 / TARGET_FPS) /10
 
-def updateScene():
+def updateScene(_=None):
     """
     updateScene()
 
@@ -132,15 +133,13 @@ def updateScene():
     Wrapper se contentant d'appeler main.update()
     """
 
+    glutTimerFunc(DELAY, updateScene, 0)
+
     # Calcul du temps écoulé
     global _last_frame
     now = time.clock()
     delta = now - _last_frame
     _last_frame = now
-
-    # Limite à 30fps environ
-    if delta < 0.033:
-        time.sleep(0.033 - delta)
 
     main.update(delta)
     glutPostRedisplay()  # Demande le réaffichage
@@ -170,7 +169,7 @@ def run(boule_store):
 
     glutDisplayFunc(drawScene)
 
-    glutIdleFunc(updateScene)
+    glutTimerFunc(DELAY, updateScene, 0)
 
     glutReshapeFunc(resizeWindow)
 
