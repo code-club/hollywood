@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 from math import sqrt
-
+from boule import K_FROTTEMENT_FLUIDE
 
 def integrateur_trivial(boules, h):
     eval_accelerations(boules)
@@ -12,6 +12,7 @@ def integrateur_trivial(boules, h):
         boule.dx += boule.ax * h
         boule.dy += boule.ay * h
         boule.dz += boule.az * h
+        boule.ax = boule.ay = boule.az = 0
 
 
 def add_vector(x1, x2):
@@ -46,32 +47,38 @@ def eval_accelerations(boules):
         for j in xrange(0, i):
             other = boules[j]
             d2 = (boule.x - other.x) ** 2 + (boule.y - other.y) ** 2 + (boule.z - other.z) ** 2
-            if d2 == 0.:
-                d2 = 1.
+
             norme = sqrt(d2)
             ux = (boule.x - other.x) / norme
             uy = (boule.y - other.y) / norme
             uz = (boule.z - other.z) / norme
 
-            boule.ax -= boule.m * other.m / d2 * ux
-            boule.ay -= boule.m * other.m / d2 * uy
-            boule.az -= boule.m * other.m / d2 * uz
-            other.ax += boule.m * other.m / d2 * ux
-            other.ay += boule.m * other.m / d2 * uy
-            other.az += boule.m * other.m / d2 * uz
+            d2 = max(d2, 0.1)
+
+            boule.ax -= other.m / d2 * ux
+            boule.ay -= other.m / d2 * uy
+            boule.az -= other.m / d2 * uz
+            other.ax += boule.m / d2 * ux
+            other.ay += boule.m / d2 * uy
+            other.az += boule.m / d2 * uz
 
         # Forces de ressorts
         for other, l0, k in boule.links:
             norme = sqrt((boule.x - other.x) ** 2 + (boule.y - other.y) ** 2 + (boule.z - other.z) ** 2)
-            if norme == 0.:
-                norme = 1
+            if norme < 10e-4:
+                continue
+
             ux = (boule.x - other.x) / norme
             uy = (boule.y - other.y) / norme
             uz = (boule.z - other.z) / norme
 
-            boule.ax += k * (norme - l0) * ux
-            boule.ay += k * (norme - l0) * uy
-            boule.az += k * (norme - l0) * uz
-            other.ax -= k * (norme - l0) * ux
-            other.ay -= k * (norme - l0) * uy
-            other.az -= k * (norme - l0) * uz
+
+            boule.ax -= k * (norme - l0) * ux / boule.m
+            boule.ay -= k * (norme - l0) * uy / boule.m
+            boule.az -= k * (norme - l0) * uz / boule.m
+
+
+        # Forces de frottement
+        boule.ax -= K_FROTTEMENT_FLUIDE * (boule.dx) / boule.m
+        boule.ay -= K_FROTTEMENT_FLUIDE * (boule.dy) / boule.m
+        boule.az -= K_FROTTEMENT_FLUIDE * (boule.dz) / boule.m

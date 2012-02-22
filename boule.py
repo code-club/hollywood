@@ -8,15 +8,17 @@ from random import random
 
 # Masse selon le type d'objet
 BOULE_MASSES = {
-    'FILE': 1.,
-    'CLASS': 1.,
+    'FILE': 5.,
+    'CLASS': 3.,
     'DEF': 1.,
 }
 
 # Lo, k
 LINKS_TYPES = {
-    'PARENT_CHILD': (1., 1.),
+    'PARENT_CHILD': (5., 1.),
 }
+
+K_FROTTEMENT_FLUIDE = 0.2
 
 
 class Boule(object):
@@ -36,7 +38,8 @@ class Boule(object):
         self.type = type
         self.x = random() * 4.0 - 2.0
         self.y = random() * 4.0 - 2.0
-        self.z = -10
+        self.z = random() * 4.0 - 20.
+        self.z = -15
         self.dx = 0
         self.dy = 0
         self.dz = 0

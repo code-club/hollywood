@@ -121,7 +121,7 @@ def initGL():
     gluQuadricTexture(_quadric, GL_TRUE)
 
 
-_last_frame = time.clock()
+_last_frame = time.time()
 TARGET_FPS = 30.0
 DELAY = int(1000 / TARGET_FPS)
 
@@ -137,7 +137,7 @@ def updateScene(_=None):
 
     # Calcul du temps écoulé
     global _last_frame
-    now = time.clock()
+    now = time.time()
     delta = now - _last_frame
     _last_frame = now
 
