@@ -38,7 +38,6 @@ class Boule(object):
         self.type = type
         self.x = random() * 4.0 - 2.0
         self.y = random() * 4.0 - 2.0
-        self.z = random() * 4.0 - 20.
         self.z = -15
         self.dx = 0
         self.dy = 0
